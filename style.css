@@ -708,10 +708,12 @@ html[data-theme="dark"] .cta-section {
   text-transform: uppercase;
 }
 
-.story h2 {
+.story h2,
+.service-detail h2 {
   font-size: clamp(2.3rem, 4vw, 3.8rem);
 }
-.story p:not(.tagline) {
+.story p:not(.tagline),
+.service-detail p:not(.tagline) {
   color: var(--muted);
   font-weight: 500;
 }
@@ -719,7 +721,8 @@ html[data-theme="dark"] .cta-section {
   margin-top: 16px;
 }
 
-.story-grid {
+.story-grid,
+.service-detail {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -785,5 +788,91 @@ html[data-theme="dark"] .cta-section {
   margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Services */
+
+.services-section {
+  padding-top: 0;
+}
+.service-detail {
+  padding-block: 55px;
+  border-top: var(--border-thick) solid var(--line);
+  scroll-margin-top: 30px;
+}
+.service-detail.reverse .service-detail-inner {
+  order: 2;
+}
+.service-detail img {
+  height: 420px;
+  border: var(--border-thick) solid var(--line);
+  object-fit: cover;
+  filter: grayscale(0.45) contrast(1.14);
+}
+.service-detail-inner {
+  max-width: 510px;
+}
+
+.tick-list {
+  padding: 0;
+  margin: 26px 0;
+  list-style: none;
+}
+.tick-list li {
+  padding: 6px 0;
+  color: var(--muted);
+  font-weight: 500;
+}
+.tick-list li::before {
+  content: "■";
+  margin-right: 13px;
+  color: var(--rust);
+  font-size: 0.72rem;
+}
+
+.faq-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 80px;
+}
+.faq-item {
+  border-bottom: var(--border-mid) solid var(--line);
+}
+.faq-item:first-child {
+  border-top: var(--border-mid) solid var(--line);
+}
+.faq-item h3 {
+  margin: 0;
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  border: 0;
+  padding: 24px 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.faq-question span {
+  color: var(--rust);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.faq-answer {
+  padding-bottom: 20px;
+}
+.faq-answer p {
+  max-width: 550px;
+  margin: 0;
+  color: var(--muted);
   font-weight: 500;
 }

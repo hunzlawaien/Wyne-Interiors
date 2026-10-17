@@ -198,4 +198,33 @@ document.addEventListener("DOMContentLoaded", () => {
       counters.forEach(animateCounter);
     }
   }
+
+  // FAQ
+
+  const faqButtons = document.querySelectorAll(".faq-question");
+
+  faqButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const answer = document.getElementById(
+        button.getAttribute("aria-controls"),
+      );
+      if (!answer) return;
+
+      const opening = button.getAttribute("aria-expanded") !== "true";
+
+      faqButtons.forEach((otherButton) => {
+        const otherAnswer = document.getElementById(
+          otherButton.getAttribute("aria-controls"),
+        );
+
+        otherButton.setAttribute("aria-expanded", "false");
+        otherButton.querySelector("span").textContent = "+";
+        if (otherAnswer) otherAnswer.hidden = true;
+      });
+
+      button.setAttribute("aria-expanded", String(opening));
+      button.querySelector("span").textContent = opening ? "−" : "+";
+      answer.hidden = !opening;
+    });
+  });
 });
