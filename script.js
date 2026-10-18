@@ -399,4 +399,45 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  // Responsive nav
+
+  const header = document.querySelector(".header");
+  const menuButton = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".navbar");
+
+  function closeMenu() {
+    if (!header || !menuButton) return;
+    header.classList.remove("nav-open");
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Open navigation");
+  }
+
+  if (header && menuButton && nav) {
+    menuButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = header.classList.toggle("nav-open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation" : "Open navigation",
+      );
+    });
+
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMenu();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!header.contains(event.target)) closeMenu();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 720) closeMenu();
+    });
+  }
 });
