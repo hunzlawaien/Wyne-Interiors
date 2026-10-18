@@ -248,4 +248,135 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  // Form Validation
+
+  // 8. Contact form validation
+  const form = document.querySelector("#contact-form");
+
+  if (form) {
+    const fields = {
+      name: form.querySelector("#name"),
+      email: form.querySelector("#email"),
+      projectType: form.querySelector("#project-type"),
+      message: form.querySelector("#message"),
+    };
+    const status = form.querySelector("#form-status");
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    // One validator per field. Returns "" when valid, or the error message.
+    const validators = {
+      name(value) {
+        if (!value) return "Please enter your name.";
+        if (value.length < 2) return "Name must be at least 2 characters.";
+        if (value.length > 60) return "Name is too long.";
+        if (!/^[a-zA-ZÀ-ÿ'’ -]+$/.test(value))
+          return "Letters, spaces, hyphens and apostrophes only.";
+        return "";
+      },
+      email(value) {
+        if (!value) return "Please enter your email address.";
+        if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(value))
+          return "Enter a valid email, e.g. name@example.com.";
+        return "";
+      },
+      projectType(value) {
+        if (!value) return "Please choose a project type.";
+        return "";
+      },
+      message(value) {
+        if (!value) return "Please tell us a little about your project.";
+        if (value.length < 20)
+          return `At least 20 characters — ${20 - value.length} more to go.`;
+        if (value.length > 1000) return "Please keep it under 1000 characters.";
+        return "";
+      },
+    };
+
+    function setError(field, message) {
+      const errorEl = document.getElementById(`${field.id}-error`);
+      const wrapper = field.closest(".form-field");
+
+      field.setAttribute("aria-invalid", String(Boolean(message)));
+      if (errorEl) errorEl.textContent = message;
+      wrapper?.classList.toggle("has-error", Boolean(message));
+      wrapper?.classList.toggle(
+        "is-valid",
+        !message && field.value.trim() !== "",
+      );
+
+      return !message;
+    }
+
+    function validateField(key) {
+      const field = fields[key];
+      return setError(field, validators[key](field.value.trim()));
+    }
+
+    function clearStatus() {
+      if (!status) return;
+      status.textContent = "";
+      status.classList.remove("is-error", "is-success");
+    }
+
+    Object.entries(fields).forEach(([key, field]) => {
+      const eventName = field.tagName === "SELECT" ? "change" : "input";
+
+      // Re-check live while typing, but only after the field was already
+      // flagged — so users aren't shown errors mid-sentence.
+      field.addEventListener(eventName, () => {
+        if (field.getAttribute("aria-invalid") === "true") validateField(key);
+        clearStatus();
+      });
+
+      // Check when leaving a field that has something in it.
+      field.addEventListener("blur", () => {
+        if (field.value.trim() !== "") validateField(key);
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const results = Object.keys(fields).map(validateField);
+      const errorCount = results.filter((r) => !r).length;
+
+      if (errorCount > 0) {
+        if (status) {
+          status.classList.add("is-error");
+          status.classList.remove("is-success");
+        }
+        Object.values(fields)
+          .find((f) => f.getAttribute("aria-invalid") === "true")
+          ?.focus();
+        return;
+      }
+
+      const firstName = fields.name.value.trim().split(" ")[0];
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Checking…";
+      }
+
+      window.setTimeout(() => {
+        form.reset();
+        Object.values(fields).forEach((field) => {
+          field.removeAttribute("aria-invalid");
+          field
+            .closest(".form-field")
+            ?.classList.remove("has-error", "is-valid");
+        });
+
+        if (status) {
+          status.classList.remove("is-error");
+          status.classList.add("is-success");
+        }
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerHTML =
+            'Check my enquiry <span aria-hidden="true">↗</span>';
+        }
+      }, 900);
+    });
+  }
 });
