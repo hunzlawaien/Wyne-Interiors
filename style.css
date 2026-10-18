@@ -1121,3 +1121,33 @@ html[data-theme="dark"] .cta-section {
 .form-status.is-error {
   color: var(--error);
 }
+
+/* Scroll button */
+
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 10;
+  width: 46px;
+  height: 46px;
+  border: var(--border-mid) solid var(--line);
+  border-radius: 0;
+  background: var(--rust);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--line);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}

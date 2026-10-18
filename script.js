@@ -251,7 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Form Validation
 
-  // 8. Contact form validation
   const form = document.querySelector("#contact-form");
 
   if (form) {
@@ -264,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const status = form.querySelector("#form-status");
     const submitButton = form.querySelector('button[type="submit"]');
 
-    // One validator per field. Returns "" when valid, or the error message.
     const validators = {
       name(value) {
         if (!value) return "Please enter your name.";
@@ -322,14 +320,11 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.entries(fields).forEach(([key, field]) => {
       const eventName = field.tagName === "SELECT" ? "change" : "input";
 
-      // Re-check live while typing, but only after the field was already
-      // flagged — so users aren't shown errors mid-sentence.
       field.addEventListener(eventName, () => {
         if (field.getAttribute("aria-invalid") === "true") validateField(key);
         clearStatus();
       });
 
-      // Check when leaving a field that has something in it.
       field.addEventListener("blur", () => {
         if (field.value.trim() !== "") validateField(key);
       });
@@ -377,6 +372,31 @@ document.addEventListener("DOMContentLoaded", () => {
             'Check my enquiry <span aria-hidden="true">↗</span>';
         }
       }, 900);
+    });
+  }
+
+  // Footer year
+  document.querySelectorAll(".year").forEach((item) => {
+    item.textContent = new Date().getFullYear();
+  });
+
+  // Scroll to top
+
+  const topButton = document.querySelector(".back-to-top");
+
+  if (topButton) {
+    const updateTopButton = () => {
+      topButton.classList.toggle("is-visible", window.scrollY > 450);
+    };
+
+    window.addEventListener("scroll", updateTopButton, { passive: true });
+    updateTopButton();
+
+    topButton.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion.matches ? "instant" : "smooth",
+      });
     });
   }
 });
