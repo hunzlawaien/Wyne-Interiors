@@ -154,28 +154,22 @@ document.addEventListener("DOMContentLoaded", () => {
   function animateCounter(counter) {
     if (counter.dataset.animated === "true") return;
     counter.dataset.animated = "true";
-
     const target = Number(counter.dataset.target);
     const suffix = counter.dataset.suffix || "";
-
     if (!Number.isFinite(target)) return;
 
     if (reducedMotion.matches) {
       counter.textContent = `${target}${suffix}`;
       return;
     }
-
     const start = performance.now();
     const duration = 1300;
-
     function update(now) {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       counter.textContent = `${Math.round(target * eased)}${suffix}`;
-
       if (progress < 1) requestAnimationFrame(update);
     }
-
     requestAnimationFrame(update);
   }
 
